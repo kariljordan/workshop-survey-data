@@ -15,12 +15,11 @@ getwd()
 setwd ("/Users/kariljordan/Data_Carpentry/workshop-survey-data/data/public_data/")
 
 # Load CSV and assign to dataframe.
-data <- read.csv("swc_postworkshop_data_archived_scrubbedMarch2017.csv", na.strings = "")
+data <- read.csv("swc_postworkshop_data_archived_scrubbedMarch2017.csv")
 
 # Load the libraries.
 library(dplyr)
 library(ggplot2)
-library(knitr)
 
 # When are participants taking the survey?
 table(data$When.Taking.Survey)
@@ -52,7 +51,8 @@ ggplot(data_when_taking_survey_tally,
   theme_bw(base_size = 14) 
 
 # An alternate way to plot when learners are taking the survey.
-# plot(data$When.Taking.Survey)
+plot(data$When.Taking.Survey)
+# I like the second plot better. I need to add labels and a title.
 
 # Feedback about the workshop overall.
 # The amount of information covered at the workshop was reasonable for allotted time.
@@ -212,10 +212,9 @@ ggplot(data_balance_tally,
   coord_flip() +
   theme_bw(base_size = 14)
 
-# Were there enough helpers at the workshop?
-table(data$Enough.Helpers)
+
 #--------------------------------------------------------
-# BM # New approach! Let's try the Likert package!
+# BM # New approach! let's try the Likert package!
 library(likert)
 library(purrr)
 
@@ -284,23 +283,4 @@ plot(data_knowledge_likert)
 
 # BM # ... you get the idea... you can copy-paste these code blocks for the other cols with different answer formats
 
-# How much of the information presented at this workshop was new to you?
-table(data$New.Information)
 
-data_new_information_tally <- 
-  data %>%
-  group_by(New.Information) %>% 
-  tally() %>% 
-  filter(!is.na(New.Information)) %>% 
-  #BM# remove column with no name on the plot
-  filter(New.Information != "") %>% 
-  arrange(desc(n))
-
-ggplot(data_new_information_tally, 
-       aes(reorder(New.Information, n),
-           n)) +
-  geom_bar(stat = 'identity') +
-  xlab("How much of the info was new?") +
-  ylab("n") +
-  coord_flip() +
-  theme_bw(base_size = 14)

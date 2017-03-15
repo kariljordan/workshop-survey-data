@@ -2,28 +2,24 @@
 #' title: "Analysis of Data Carpentry Pre-Workshop Survey Data"
 #' author: "Kari L. Jordan, PhD"
 #' contributor(s): Ben Marwick
-#' published: "March 14, 2017"
+#' date: "March 1, 2017"
 #' ---
-install.packages("knitr")
-install.packages("ggplot2")
 
-```{r echo=FALSE, comment="", echo=FALSE}
-head(df)
-```
+#K# The following is an analysis of the pre-workshop survey data collected for Data Carpentry 
+#K# workshops from March 2016 through February 2017
 
-# The following is an analysis of the pre-workshop survey data collected for Data Carpentry 
-# workshops from March 2016 through February 2017
-
-
-
-# Confirm working directory
+#K# Confirm working directory
 getwd()
 
-```{r}
-# I used the drop-down Session -> Set Working Directory -> To Source File Location
-data <- read.csv("~/Desktop/workshop-survey-data/public_data/dc_preworkshop_surveydata_2016March_2017Feb.csv", 
-                 header = TRUE, na.strings = "")
-```
+#K# Load CSV and assign to dataframe.
+#K# data <- read.csv("public_data/dc_preworkshop_surveydata_2016March_2017Feb.csv", header = TRUE)
+
+
+#B# change path because I put the data in the same folder as the script file, and I use RStudio -> Session -> 
+#B# Set Working Directory -> To Source File Location, this is better for reproducibility.
+#B# I pressed return after the ,  to make the line a bit shorter, and the indenting makes it easier to read
+data <- read.csv("public_data/dc_preworkshop_surveydata_2016March_2017Feb.csv", 
+                 header = TRUE)
 
 #K# Install dplyr package
 #B# only need to do this once on your computer, not every time you use dplyr
@@ -106,18 +102,13 @@ library(plyr)
 #K# These commands access the dataframe 'data', filter out the NAs and arrange them
 #K# in descending order
 library(ggplot2)
-```{r}
 data_status_tally <- 
-  data %>% 
+  data %>%
   group_by(Status) %>% 
   tally() %>% 
   filter(!is.na(Status)) %>% 
   arrange(desc(n))
 
-# take a look 
-library(knitr)
-kable(data_status_tally)
-```
 #K# These commands create a plot of respondents' Status
 ggplot(data_status_tally, 
        aes(reorder(Status, n),
